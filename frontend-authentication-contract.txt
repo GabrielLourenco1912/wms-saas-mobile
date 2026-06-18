@@ -1,0 +1,187 @@
+WMS SaaS - Authentication Frontend Contract
+
+Purpose
+This document describes the current backend authentication contract so a frontend agent can build login, registration, token refresh, and authenticated request handling.
+
+Base API
+- Auth routes are under /api/auth.
+- The backend currently allows unauthenticated access to:
+  - POST /api/auth/login
+  - POST /api/auth/register
+  - POST /api/auth/refresh
+- Other routes require Authorization: Bearer <access_token>.
+
+Standard Response Envelope
+All successful auth responses and normalized error responses follow this shape:
+
+{
+  "timestamp": "2026-06-18T10:30:00.000",
+  "status": "OK",
+  "message": "Authentication Success",
+  "data": {}
+}
+
+Fields:
+- timestamp: server-side response timestamp.
+- status: HTTP status enum name, for example OK, CREATED, BAD_REQUEST, UNAUTHORIZED, CONFLICT, INTERNAL_SERVER_ERROR.
+- message: human-readable message.
+- data: response payload. For simple errors this can be null. For validation errors this contains a list of field errors.
+
+Auth Payload
+When authentication succeeds, data has this shape:
+
+{
+  "issuer": "https://api.wmssaas.com",
+  "issuedAt": "2026-06-18T10:30:00Z",
+  "expiresAt": "2026-06-18T10:45:00Z",
+  "subject": "01J...",
+  "token": "<jwt_access_token>",
+  "refreshToken": "<refresh_token>"
+}
+
+The access token is a JWT with a short lifetime. At the time of this contract, the backend issues access tokens valid for 15 minutes.
+
+Login
+POST /api/auth/login
+
+Request body:
+{
+  "email": "user@example.com",
+  "password": "plain-password"
+}
+
+Success response:
+- HTTP 200
+- status: OK
+- message: Authentication Success
+- data: Auth Payload
+
+Frontend behavior:
+- Store data.token as the access token.
+- Store data.refreshToken as the refresh token.
+- Use Authorization: Bearer <token> for protected requests.
+
+Register
+POST /api/auth/register
+
+Request body:
+{
+  "name": "User Name",
+  "email": "user@example.com",
+  "password": "plain-password"
+}
+
+Success response:
+- HTTP 201
+- status: CREATED
+- message: Register and authentication Success
+- data: Auth Payload
+
+Frontend behavior:
+- Treat register like login after success.
+- Store access and refresh tokens from data.
+- Redirect the user to the authenticated area.
+
+Refresh Token
+POST /api/auth/refresh
+
+Headers:
+Authorization: Bearer <current_or_expired_access_token>
+
+Request body:
+{
+  "refreshToken": "<refresh_token>"
+}
+
+Success response:
+- HTTP 200
+- status: OK
+- message: Refresh Success
+- data: Auth Payload
+
+Frontend behavior:
+- When a protected request returns 401, call /api/auth/refresh.
+- If refresh succeeds, replace both stored tokens with data.token and data.refreshToken.
+- Retry the original request once with the new access token.
+- If refresh fails, clear tokens and redirect to login.
+
+Important implementation detail:
+- The current backend refresh route expects the access token in the Authorization header and the refresh token in the request body.
+
+Unauthorized Response
+Security-level unauthorized responses also use the standard envelope.
+
+Example:
+{
+  "timestamp": "2026-06-18T10:30:00.000",
+  "status": "UNAUTHORIZED",
+  "message": "Token expirado ou inválido.",
+  "data": null
+}
+
+Possible unauthorized messages:
+- Token expirado ou inválido.
+- Autenticação necessária.
+
+Validation Error Response
+Validation and request errors use the same envelope. When field errors exist, they are placed in data.
+
+Example:
+{
+  "timestamp": "2026-06-18T10:30:00.000",
+  "status": "BAD_REQUEST",
+  "message": "Validation Error",
+  "data": [
+    {
+      "field": "email",
+      "message": "must not be blank"
+    }
+  ]
+}
+
+Other Error Examples
+Malformed JSON:
+{
+  "timestamp": "2026-06-18T10:30:00.000",
+  "status": "BAD_REQUEST",
+  "message": "Request body is invalid",
+  "data": null
+}
+
+Email already in use:
+{
+  "timestamp": "2026-06-18T10:30:00.000",
+  "status": "CONFLICT",
+  "message": "Email already in use: user@example.com",
+  "data": null
+}
+
+Recommended Frontend Auth State
+Keep these values in the auth layer:
+- accessToken
+- refreshToken
+- userId or subject
+- expiresAt
+- isAuthenticated
+
+Recommended HTTP Client Behavior
+1. Attach Authorization: Bearer <accessToken> to protected API requests.
+2. On 401, pause duplicate refresh attempts if multiple requests fail at once.
+3. Call POST /api/auth/refresh with Authorization header plus refreshToken body.
+4. On refresh success, update tokens and retry the failed request once.
+5. On refresh failure, clear auth state and send the user to login.
+
+Logout
+There is no backend logout endpoint in the current contract.
+
+Frontend logout behavior:
+- Clear accessToken and refreshToken locally.
+- Clear authenticated user state.
+- Redirect to login.
+
+Suggested Screens
+- Login page with email and password.
+- Register page with name, email, and password.
+- Authenticated app shell that only renders when a valid access token exists.
+- Loading state while checking/restoring local auth state.
+- Error display that reads the standard response envelope message and field errors from data.
