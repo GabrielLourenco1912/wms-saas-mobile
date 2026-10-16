@@ -1,0 +1,213 @@
+{
+  "concept": "Precisão em movimento",
+  "symbol": {
+    "name": "W de percurso",
+    "version": "1.0",
+    "viewBox": [
+      0,
+      0,
+      128,
+      128
+    ],
+    "path": "M16 28H34V56L46 76L64 48L82 76L94 56V28H112V62L88 100H77L64 80L51 100H40L16 62Z",
+    "bounds": {
+      "left": 16,
+      "top": 28,
+      "right": 112,
+      "bottom": 100
+    },
+    "clearSpace": 16,
+    "minimumCanvas": {
+      "technical": 16,
+      "layoutRecommended": 32
+    },
+    "maskable": {
+      "scale": 0.84,
+      "translate": 10.24,
+      "safeCircleRadius": 51.2
+    },
+    "android": {
+      "canvas": 108,
+      "scale": 0.525,
+      "translate": 20.4,
+      "safeCircleRadius": 33
+    },
+    "note": "Contorno vetorial próprio do projeto. Uma única forma preenchida, sem fonte, contorno, efeitos ou recursos externos. A área de proteção considera a silhueta; o canvas mestre já a inclui."
+  },
+  "signatureSource": {
+    "url": "https://lourencogabriel.dev/downloads/assinaturas-gabriel.zip",
+    "sha256": "f72616234073267549655055123c16d1a6566d8e0f9553346703cc4937539e3b",
+    "catalogueCount": 9,
+    "originalFilesCount": 146
+  },
+  "files": [
+    {
+      "path": "assets/branding/fonts/Manrope-Variable.ttf",
+      "sha256": "3ae11c49db0455a3cc33e37d380f20fdb8c7f8b41dc07625c177e3d87a9d6ae6"
+    },
+    {
+      "path": "assets/branding/fonts/DMMono-Regular.ttf",
+      "sha256": "55b4c98f123daebb3ed27947ba47b2af00554fc6284d639a540bcef5e6258ad2"
+    },
+    {
+      "path": "assets/branding/fonts/DMMono-Medium.ttf",
+      "sha256": "fd327daf461db87b44a87def475d251bf03b997f7c07d9680592d75dbbfaad0b"
+    },
+    {
+      "path": "assets/branding/fonts/Manrope-OFL.txt",
+      "sha256": "58172e0c0fac2cda8a37b348164bb55e44b0e69051e557e92b1d3f6910141f7b"
+    },
+    {
+      "path": "assets/branding/fonts/DMMono-OFL.txt",
+      "sha256": "2bada5ea45c3c63b7f1ea1f88ce9672c9e4f0c42b2c3b7378949084fe55a3066"
+    },
+    {
+      "path": "assets/branding/author/01-monograma-gl-light-mono.png",
+      "sha256": "46ef269c1e9028327dedec8c8055f12d6050570872a05ce3687b2d39e62639f2"
+    },
+    {
+      "path": "assets/branding/author/01-monograma-gl-dark-mono.png",
+      "sha256": "2af7d883faa3177a6f7bd680f091eb4bb7994a74ff54fa3cd311f79516c08ef2"
+    },
+    {
+      "path": "assets/branding/author/README.md",
+      "sha256": "5d639b0eefa2ee44b5fd7e472bb9f636934a3ac1bdd8b1ebe6d23818294d47cb"
+    },
+    {
+      "path": "android/app/src/main/res/drawable/ic_launcher_foreground.xml",
+      "sha256": "67aa98679eab83007ff473e2b822458b7f396d0215700202a31a29d6415c096d"
+    },
+    {
+      "path": "android/app/src/main/res/drawable/ic_launcher_monochrome.xml",
+      "sha256": "5a3ab1d9be97a34c408376cac3375aa0d3575670cb9a390a6f49cb41ba5dae7c"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+      "sha256": "d616ab52bb3272e4959b2434310748da7bdfd1196b7762e843ac3fdbf6728dd4"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-anydpi-v33/ic_launcher.xml",
+      "sha256": "bd998668d8f050e4aff3175665763fa5aabd4787c1a66214176a4ecf80740f2f"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-hdpi/ic_launcher.png",
+      "sha256": "400e0d919f186cf63918a6c9e3b3d55c479c595a7554d1938a6aefa92637faf0"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-mdpi/ic_launcher.png",
+      "sha256": "b2539ff94d0af01e2fae7da12e6755dcd7826d59f9c8b1d2f30c4da10a179078"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-xhdpi/ic_launcher.png",
+      "sha256": "72a09bfbb32e388846634e30046cb47bf19c91918f29f6b1c3088dcaf84857d7"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-xxhdpi/ic_launcher.png",
+      "sha256": "16f2c01554f0b9e8f5e7f9674b5bfb448fbd945b1a67f914cc71db9b9cee0b9c"
+    },
+    {
+      "path": "android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+      "sha256": "c9e2361d084f7d11cf2002babbe55eead15fbc03d4ae42e92a12c35182c51901"
+    },
+    {
+      "path": "android/app/src/main/res/values/wms_launcher_colors.xml",
+      "sha256": "aa3cf35539b8fc1031b0c6425dddcbb9626aa2f0d27ac29d14d0162194098c26"
+    },
+    {
+      "path": "ios/Runner/Assets.xcassets/AppIcon.appiconset/Contents.json",
+      "sha256": "cd841cae92e48a8d48c79a6b634e7fb1f88fb97c924e24736b3bc3824ede3975"
+    },
+    {
+      "path": "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-1024x1024@1x.png",
+      "sha256": "50041433efe24af5be5985537a004929610280003008f407e60e2bad72bc89fb"
+    },
+    {
+      "path": "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@1x.png",
+      "sha256": "a9dbf08d54fdb8928962d9eb375cfac17b976e7efeaaa9d6c5b171c958e9b11d"
+    },
+    {
+      "path": "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@2x.png",
+      "sha256": "37488bca8cf80a8525a00b7a80a1fddd522f86417bf3df04cacf13601557b9e8"
+    },
+    {
+      "path": "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-20x20@3x.png",
+      "sha256": "75931b8f02aa10fcb5692ff0072111a5a2822f357b57a0f448022365605db81b"
+    },
+    {
+      "path": "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@1x.png",
+      "sha256": "253205989d4723effa7d28faf890074e4720d3227f766fb93836bbdda1f72194"
+    },
+    {
+      "path": "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@2x.png",
+      "sha256": "94dccf8e850f4221dc24dd219b66369ae63d6e7979b6dd0670efce411c6a5d60"
+    },
+    {
+      "path": "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-29x29@3x.png",
+      "sha256": "aa14e7ba3270bf012d7162a36a53fb6504677062b4b5d420de09e13c30dbfbbf"
+    },
+    {
+      "path": "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@1x.png",
+      "sha256": "37488bca8cf80a8525a00b7a80a1fddd522f86417bf3df04cacf13601557b9e8"
+    },
+    {
+      "path": "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@2x.png",
+      "sha256": "93c114a26a57f81068500c88a343d5af0057f1ec322732eb266bdd6c6ca3c0bf"
+    },
+    {
+      "path": "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-40x40@3x.png",
+      "sha256": "95ebc3effcbe7b94424a4304a3a63491d5cfa8203a3eb3164b41b283daa857c0"
+    },
+    {
+      "path": "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@2x.png",
+      "sha256": "95ebc3effcbe7b94424a4304a3a63491d5cfa8203a3eb3164b41b283daa857c0"
+    },
+    {
+      "path": "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-60x60@3x.png",
+      "sha256": "23f7c4887c64a3bfac643613c63b392f5584a749bab0d8c8a01139b7de227f5b"
+    },
+    {
+      "path": "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@1x.png",
+      "sha256": "b5036735dd611066f65a81c2b1f06e1e5776f4f2b9e35f6829b3a166cdf963f2"
+    },
+    {
+      "path": "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-76x76@2x.png",
+      "sha256": "efc16000528ecbde0bd9140cc945aa81ec45bc05de67a964d6b0feb17d2a0f82"
+    },
+    {
+      "path": "ios/Runner/Assets.xcassets/AppIcon.appiconset/Icon-App-83.5x83.5@2x.png",
+      "sha256": "014ee5bb87e530283bbf41df972a1c804e857ffbb5a6aede39d171f67e3d6b82"
+    },
+    {
+      "path": "ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage.png",
+      "sha256": "8303cf95659d78ebeb1ee337df9601f0a7dd46980574cc29586ac42bc134231e"
+    },
+    {
+      "path": "ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@2x.png",
+      "sha256": "8303cf95659d78ebeb1ee337df9601f0a7dd46980574cc29586ac42bc134231e"
+    },
+    {
+      "path": "ios/Runner/Assets.xcassets/LaunchImage.imageset/LaunchImage@3x.png",
+      "sha256": "8303cf95659d78ebeb1ee337df9601f0a7dd46980574cc29586ac42bc134231e"
+    },
+    {
+      "path": "web/favicon.png",
+      "sha256": "000706b93c34a60f720751ba1d04501faccce7f2dcbba0cdcaae4ea0b85f79e8"
+    },
+    {
+      "path": "web/icons/Icon-192.png",
+      "sha256": "c9e2361d084f7d11cf2002babbe55eead15fbc03d4ae42e92a12c35182c51901"
+    },
+    {
+      "path": "web/icons/Icon-512.png",
+      "sha256": "2d5f575c800ebeb4773160e023ec348e309c61f7a8f0b8238eaada15fdf9de83"
+    },
+    {
+      "path": "web/icons/Icon-maskable-192.png",
+      "sha256": "84b65b8922bcf996d57064ec14d9348dfe46dddaf67c420a69ba3572c0545191"
+    },
+    {
+      "path": "web/icons/Icon-maskable-512.png",
+      "sha256": "f7e99ea6fce5cbd02f135527d799abb027df2d4f9f19b4270f99d7fba924ca46"
+    }
+  ]
+}

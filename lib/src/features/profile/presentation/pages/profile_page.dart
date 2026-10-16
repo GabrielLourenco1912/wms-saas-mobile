@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../app/branding/brand_about_card.dart';
 import '../../../../core/errors/api_exception.dart';
 import '../../../auth/application/auth_controller.dart';
 
@@ -125,6 +126,8 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
                   ],
                 ),
               ),
+              const SizedBox(height: 12),
+              const BrandAboutCard(),
               const SizedBox(height: 24),
               FilledButton.icon(
                 style: FilledButton.styleFrom(

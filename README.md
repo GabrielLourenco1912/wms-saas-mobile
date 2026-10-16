@@ -2,7 +2,7 @@
 
 Aplicativo Flutter para executar operações de armazém no backend WMS: recebimento, armazenagem, separação, expedição, inventário, transferências e consulta de estoque/auditoria. Os dados e os totais do painel vêm da API; o aplicativo não usa o antigo ambiente de demonstração em memória.
 
-A documentação de integração está em [docs/INTEGRACAO_API.md](docs/INTEGRACAO_API.md), com a relação entre telas, endpoints, permissões e limites desta entrega. O contrato completo é o [guia dos clientes do backend](../wms-saas-backend/docs/API_CLIENTS.md), publicado no commit `806b14b` do backend.
+A documentação de integração está em [docs/INTEGRACAO_API.md](docs/INTEGRACAO_API.md), com a relação entre telas, endpoints, permissões e limites desta entrega. A identidade visual, os ícones nativos e sua manutenção estão em [docs/IDENTIDADE_VISUAL.md](docs/IDENTIDADE_VISUAL.md). O contrato completo é o [guia dos clientes do backend](../wms-saas-backend/docs/API_CLIENTS.md), publicado no commit `806b14b` do backend.
 
 ## Executar
 
@@ -41,6 +41,6 @@ flutter test
 flutter build apk --debug
 ```
 
-Há testes de autenticação, concorrência do refresh, navegação real, paginação, seletores, contratos operacionais, precisão de quantidades e repetição idempotente. Esses testes não substituem a homologação com o backend em execução, entrega real de e-mail e dispositivos de operação. Validação desta entrega: análise estática sem ocorrências, 64 testes aprovados e APK Android debug compilado. Os detalhes estão no guia de integração.
+Há testes de autenticação, concorrência do refresh, navegação real, paginação, seletores, contratos operacionais, precisão de quantidades e repetição idempotente. Esses testes não substituem a homologação com o backend em execução, entrega real de e-mail e dispositivos de operação. Validação desta entrega: análise estática sem ocorrências, 66 testes aprovados e APK Android debug compilado. Os detalhes estão no guia de integração.
 
 O arquivo `frontend-authentication-contract.txt` foi preservado como histórico e está **obsoleto**: descreve cadastro público e login direto que não representam a API atual. Use os guias Markdown citados acima.

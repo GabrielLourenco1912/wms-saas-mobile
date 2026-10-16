@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../app/branding/brand_tokens.dart';
+
 import 'inbound_contracts.dart';
 
 class InboundErrorCard extends StatelessWidget {
@@ -108,6 +110,7 @@ class InboundScannerField extends StatelessWidget {
       textInputAction: TextInputAction.next,
       autocorrect: false,
       enableSuggestions: false,
+      style: const TextStyle(fontFamily: AppBrand.monoFont, fontSize: 16),
       decoration: InputDecoration(
         labelText: label,
         prefixIcon: const Icon(Icons.barcode_reader),

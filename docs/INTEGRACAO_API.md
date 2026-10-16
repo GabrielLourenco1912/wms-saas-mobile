@@ -95,13 +95,14 @@ flutter test
 flutter build apk --debug
 ```
 
-Validação em 15/10/2026, com Flutter 3.41.9 e Dart 3.11.5:
+Validação atualizada em 16/10/2026, com Flutter 3.41.9 e Dart 3.11.5:
 
 - Formatação: nenhum arquivo pendente.
 - `flutter analyze --no-pub`: nenhuma ocorrência.
-- `flutter test --no-pub`: **64 testes aprovados**.
+- `flutter test --no-pub`: **66 testes aprovados**.
 - `flutter build apk --debug --no-pub`: APK Android gerado em `build/app/outputs/flutter-apk/app-debug.apk`.
-- Layout verificado em teste com largura de 320 pixels e escala de texto de 1,6; painel de 390 × 844 também inspecionado por captura renderizada com dados de teste.
+- Layout verificado em teste com largura de 320 pixels e escala de texto de 1,6 no painel/listas e 2 no acesso e na seção Sobre; capturas de 390 × 844 também inspecionadas com dados de teste.
+- Tema Manrope/DM Mono, marca, autoria e recursos nativos aplicados conforme [guia de identidade visual](IDENTIDADE_VISUAL.md), preservando os contratos acima.
 
  A existência dos testes não representa homologação com um armazém, backend real, servidor SMTP ou scanner físico. A conferência em dispositivo e a homologação integrada permanecem necessárias, assim como validar conectividade/permissões de rede nas plataformas de distribuição.
 

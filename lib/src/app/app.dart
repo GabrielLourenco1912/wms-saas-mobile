@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'branding/brand_tokens.dart';
 import 'router/app_router.dart';
 import 'theme/app_theme.dart';
 
@@ -12,7 +13,7 @@ class WmsMobileApp extends ConsumerWidget {
     final router = ref.watch(appRouterProvider);
 
     return MaterialApp.router(
-      title: 'WMS SaaS',
+      title: AppBrand.name,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       routerConfig: router,

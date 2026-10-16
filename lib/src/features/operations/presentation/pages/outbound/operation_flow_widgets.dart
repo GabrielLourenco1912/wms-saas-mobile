@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../../app/branding/brand_tokens.dart';
 import '../../../data/warehouse_repository.dart';
 
 typedef OperationDetailBuilder =
@@ -229,6 +230,7 @@ Widget operationField({
   required TextEditingController controller,
   bool enabled = true,
   bool isRequired = true,
+  bool technical = false,
   int maxLength = 100,
   String? helper,
   String? Function(String?)? validator,
@@ -241,6 +243,9 @@ Widget operationField({
     enabled: enabled,
     maxLength: maxLength,
     keyboardType: keyboardType,
+    style: technical || keyboardType?.index == TextInputType.number.index
+        ? const TextStyle(fontFamily: AppBrand.monoFont, fontSize: 16)
+        : null,
     autocorrect: false,
     enableSuggestions: false,
     textInputAction: TextInputAction.next,

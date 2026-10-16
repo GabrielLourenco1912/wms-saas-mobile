@@ -1,0 +1,3 @@
+# Recursos de marca preservados como fornecidos, inclusive as licenças OFL.
+assets/branding/** -text
+assets/branding/fonts/*-OFL.txt whitespace=-blank-at-eol,cr-at-eol

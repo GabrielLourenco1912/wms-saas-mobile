@@ -183,17 +183,20 @@ class _PickingCollectionPageState extends ConsumerState<PickingCollectionPage> {
     fields: (busy) => [
       operationField(
         label: 'Posição de origem lida',
+        technical: true,
         controller: _sourcePosition,
         enabled: !busy,
         maxLength: 50,
       ),
       operationField(
         label: 'LPN de origem lido',
+        technical: true,
         controller: _sourceLpn,
         enabled: !busy,
       ),
       operationField(
         label: 'SKU ou barcode do produto lido',
+        technical: true,
         controller: _product,
         enabled: !busy,
       ),
@@ -236,12 +239,14 @@ class _PickingCollectionPageState extends ConsumerState<PickingCollectionPage> {
         const SizedBox(height: 14),
         operationField(
           label: 'Código da doca lido',
+          technical: true,
           controller: _destinationPosition,
           enabled: !busy,
           maxLength: 50,
         ),
         operationField(
           label: 'LPN de destino lido',
+          technical: true,
           controller: _destinationLpn,
           enabled: !busy,
         ),

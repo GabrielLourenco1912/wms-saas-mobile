@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../app/branding/brand_mark.dart';
+import '../../../../app/branding/brand_tokens.dart';
 import '../../../auth/application/auth_controller.dart';
 import '../../../operations/data/warehouse_repository.dart';
 import '../../../operations/presentation/widgets/operational_modules.dart';
@@ -70,34 +72,42 @@ class DashboardPage extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF12201E),
-                  borderRadius: BorderRadius.circular(8),
+                  color: BrandColors.ink,
+                  borderRadius: BorderRadius.circular(AppBrand.featureRadius),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'SEU ARMAZÉM',
-                      style: TextStyle(
-                        color: Color(0xFF9AE0CF),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 1,
-                      ),
+                    const Row(
+                      children: [
+                        WmsBrandMark(size: 32, color: BrandColors.accent),
+                        SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'SEU ARMAZÉM',
+                            style: TextStyle(
+                              color: BrandColors.accent,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 1,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 12),
                     Text(
                       'Olá, ${auth?.user?.name ?? 'usuário'}',
                       style: Theme.of(context).textTheme.headlineSmall
                           ?.copyWith(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w800,
+                            color: BrandColors.inverseText,
+                            fontWeight: FontWeight.w700,
                           ),
                     ),
                     const SizedBox(height: 8),
                     const Text(
                       'Acompanhe as pendências e continue a operação.',
-                      style: TextStyle(color: Color(0xFFD5DEDB)),
+                      style: TextStyle(color: BrandColors.inverseMuted),
                     ),
                   ],
                 ),
@@ -158,7 +168,7 @@ class _PendingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Card(
     child: InkWell(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.circular(AppBrand.cardRadius),
       onTap: () => context.go(item.module.route),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -172,9 +182,10 @@ class _PendingCard extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               item.count?.toString() ?? 'Indisponível',
-              style: Theme.of(
-                context,
-              ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.w800),
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.w700,
+                fontFeatures: const [FontFeature.tabularFigures()],
+              ),
             ),
             const SizedBox(height: 4),
             Text(

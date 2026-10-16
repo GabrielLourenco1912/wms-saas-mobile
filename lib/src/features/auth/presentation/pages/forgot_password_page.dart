@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../app/branding/brand_tokens.dart';
+
 import '../../data/repositories/auth_repository_impl.dart';
 import '../../domain/entities/auth_session.dart';
 import '../widgets/auth_error_banner.dart';
@@ -89,6 +91,11 @@ class _ForgotPasswordPageState extends ConsumerState<ForgotPasswordPage> {
                   else ...[
                     TextFormField(
                       key: const ValueKey('recovery-code'),
+                      style: const TextStyle(
+                        fontFamily: AppBrand.monoFont,
+                        fontSize: 20,
+                        letterSpacing: 2,
+                      ),
                       controller: _code,
                       enabled: !_loading,
                       keyboardType: TextInputType.number,

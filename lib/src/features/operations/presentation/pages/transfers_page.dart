@@ -641,6 +641,7 @@ class _CreateTransferPageState extends ConsumerState<_CreateTransferPage> {
                 if (_mode == _TransferMode.stock)
                   operationField(
                     label: 'Código do LPN de destino',
+                    technical: true,
                     controller: _destinationLpn,
                     enabled: !busy && canSelect,
                     helper:

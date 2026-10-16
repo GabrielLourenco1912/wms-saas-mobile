@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../app/branding/brand_tokens.dart';
+
 import '../../application/auth_controller.dart';
 import '../../domain/entities/auth_session.dart';
 import '../widgets/auth_error_banner.dart';
@@ -137,6 +139,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               ] else ...[
                 TextFormField(
                   key: const ValueKey('login-code'),
+                  style: const TextStyle(
+                    fontFamily: AppBrand.monoFont,
+                    fontSize: 20,
+                    letterSpacing: 2,
+                  ),
                   controller: _codeController,
                   enabled: !isLoading,
                   autofocus: true,

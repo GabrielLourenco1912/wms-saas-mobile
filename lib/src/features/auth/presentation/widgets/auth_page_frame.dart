@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../../../../app/branding/author_credit.dart';
+import '../../../../app/branding/brand_mark.dart';
+import '../../../../app/branding/brand_tokens.dart';
+
 class AuthPageFrame extends StatelessWidget {
   const AuthPageFrame({
     super.key,
@@ -17,17 +21,10 @@ class AuthPageFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
 
     return Scaffold(
       body: DecoratedBox(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFFE8F3F0), Color(0xFFF8FAF9), Color(0xFFFFF7E8)],
-          ),
-        ),
+        decoration: const BoxDecoration(color: BrandColors.background),
         child: SafeArea(
           child: LayoutBuilder(
             builder: (context, constraints) {
@@ -52,22 +49,14 @@ class AuthPageFrame extends StatelessWidget {
                               width: 54,
                               height: 54,
                               decoration: BoxDecoration(
-                                color: colorScheme.primary,
+                                color: BrandColors.ink,
                                 borderRadius: BorderRadius.circular(8),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: colorScheme.primary.withValues(
-                                      alpha: 0.18,
-                                    ),
-                                    blurRadius: 18,
-                                    offset: const Offset(0, 10),
-                                  ),
-                                ],
                               ),
-                              child: const Icon(
-                                Icons.warehouse_outlined,
-                                color: Colors.white,
-                                size: 28,
+                              child: const Center(
+                                child: WmsBrandMark(
+                                  size: 44,
+                                  color: BrandColors.accent,
+                                ),
                               ),
                             ),
                             const SizedBox(width: 14),
@@ -76,17 +65,17 @@ class AuthPageFrame extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'WMS SaaS',
+                                    AppBrand.name,
                                     style: theme.textTheme.titleLarge?.copyWith(
-                                      fontWeight: FontWeight.w900,
-                                      color: const Color(0xFF12201E),
+                                      fontWeight: FontWeight.w700,
+                                      color: BrandColors.text,
                                     ),
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
                                     'Operação mobile de armazém',
                                     style: theme.textTheme.bodyMedium?.copyWith(
-                                      color: const Color(0xFF63706C),
+                                      color: BrandColors.muted,
                                     ),
                                   ),
                                 ],
@@ -105,15 +94,15 @@ class AuthPageFrame extends StatelessWidget {
                                   title,
                                   style: theme.textTheme.headlineSmall
                                       ?.copyWith(
-                                        fontWeight: FontWeight.w900,
-                                        color: const Color(0xFF12201E),
+                                        fontWeight: FontWeight.w700,
+                                        color: BrandColors.text,
                                       ),
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
                                   subtitle,
                                   style: theme.textTheme.bodyMedium?.copyWith(
-                                    color: const Color(0xFF63706C),
+                                    color: BrandColors.muted,
                                     height: 1.35,
                                   ),
                                 ),
@@ -125,6 +114,8 @@ class AuthPageFrame extends StatelessWidget {
                         ),
                         const SizedBox(height: 18),
                         footer,
+                        const SizedBox(height: 24),
+                        const Center(child: AuthorCredit()),
                       ],
                     ),
                   ),
