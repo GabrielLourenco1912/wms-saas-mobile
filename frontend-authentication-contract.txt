@@ -1,3 +1,7 @@
+DOCUMENTO HISTÓRICO — OBSOLETO
+Consulte docs/INTEGRACAO_API.md e ../wms-saas-backend/docs/API_CLIENTS.md.
+O conteúdo abaixo descreve uma versão anterior da API e não deve orientar novos clients.
+
 WMS SaaS - Authentication Frontend Contract
 
 Purpose
