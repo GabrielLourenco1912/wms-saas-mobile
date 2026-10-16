@@ -43,6 +43,7 @@ class ApiException implements Exception {
   }
 
   factory ApiException.fromDio(DioException error) {
+    if (error.error case final ApiException exception) return exception;
     final response = error.response;
     final data = response?.data;
 
@@ -62,7 +63,16 @@ class ApiException implements Exception {
     }
 
     return ApiException(
-      message: error.message ?? 'Falha na comunicação com a API.',
+      message: switch (error.type) {
+        DioExceptionType.connectionTimeout ||
+        DioExceptionType.receiveTimeout ||
+        DioExceptionType.sendTimeout =>
+          'A conexão demorou para responder. Verifique sua rede e tente novamente.',
+        DioExceptionType.connectionError =>
+          'Não foi possível conectar ao servidor. Verifique sua conexão.',
+        DioExceptionType.cancel => 'Solicitação cancelada.',
+        _ => 'Não foi possível concluir a solicitação. Tente novamente.',
+      },
       statusCode: response?.statusCode,
     );
   }

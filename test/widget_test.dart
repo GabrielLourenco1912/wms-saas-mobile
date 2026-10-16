@@ -18,7 +18,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Entrar no WMS'), findsOneWidget);
-    expect(find.text('Criar uma conta para a operação'), findsOneWidget);
+    expect(find.text('Esqueci minha senha'), findsOneWidget);
   });
 }
 

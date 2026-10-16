@@ -1,153 +1,243 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../../core/config/app_config.dart';
+import '../../../../core/errors/api_exception.dart';
 import '../../../auth/application/auth_controller.dart';
 
-class ProfilePage extends ConsumerWidget {
+class ProfilePage extends ConsumerStatefulWidget {
   const ProfilePage({super.key});
+  @override
+  ConsumerState<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends ConsumerState<ProfilePage> {
+  bool _refreshing = false;
+  bool _loggingOut = false;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final session = ref.watch(authControllerProvider).value?.session;
-
+  Widget build(BuildContext context) {
+    final user = ref.watch(authControllerProvider).value?.user;
+    final colors = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(title: const Text('Perfil')),
+      appBar: AppBar(title: const Text('Meu perfil')),
       body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
-          children: [
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(18),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        child: RefreshIndicator(
+          onRefresh: _reload,
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+            children: [
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 28,
+                            backgroundColor: colors.primaryContainer,
+                            child: Icon(
+                              Icons.person_outline,
+                              color: colors.onPrimaryContainer,
+                              size: 30,
+                            ),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  user?.name ?? 'Seu perfil',
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  user?.email ?? '',
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      const Divider(),
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: const Icon(Icons.badge_outlined),
+                        title: const Text('Perfil de acesso'),
+                        subtitle: Text(_profile(user?.profileCode)),
+                      ),
+                      ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: const Icon(Icons.verified_user_outlined),
+                        title: const Text('Situação da conta'),
+                        subtitle: Text(_status(user?.status)),
+                      ),
+                      OutlinedButton.icon(
+                        onPressed: _refreshing || _loggingOut ? null : _reload,
+                        icon: _refreshing
+                            ? const SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Icon(Icons.refresh),
+                        label: const Text('Atualizar permissões'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Card(
+                child: ExpansionTile(
+                  leading: const Icon(Icons.security_outlined),
+                  title: const Text('Minhas permissões'),
+                  subtitle: Text(
+                    '${user?.permissions.length ?? 0} permissões concedidas pelo gestor',
+                  ),
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          width: 52,
-                          height: 52,
-                          decoration: BoxDecoration(
-                            color: Theme.of(
-                              context,
-                            ).colorScheme.primary.withValues(alpha: 0.12),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(
-                            Icons.person,
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                        ),
-                        const SizedBox(width: 14),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Usuário autenticado',
-                                style: TextStyle(fontWeight: FontWeight.w900),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                session?.subject ?? 'Sessão local',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  color: Color(0xFF63706C),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: (user?.permissions.toList() ?? [])
+                            .map(
+                              (permission) => Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 4,
+                                ),
+                                child: Text(
+                                  _permissionLabel(permission),
+                                  style: Theme.of(context).textTheme.bodySmall,
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 18),
-                    const Divider(height: 1),
-                    const SizedBox(height: 18),
-                    _InfoRow(
-                      icon: Icons.schedule_outlined,
-                      label: 'Token expira em',
-                      value: session == null
-                          ? 'Indisponível'
-                          : _formatDateTime(session.expiresAt),
-                    ),
-                    const SizedBox(height: 12),
-                    const _InfoRow(
-                      icon: Icons.dns_outlined,
-                      label: 'API',
-                      value: AppConfig.apiBaseUrl,
-                    ),
-                    const SizedBox(height: 18),
-                    FilledButton.icon(
-                      style: FilledButton.styleFrom(
-                        backgroundColor: Theme.of(context).colorScheme.error,
+                            )
+                            .toList(),
                       ),
-                      onPressed: () {
-                        ref.read(authControllerProvider.notifier).logout();
-                      },
-                      icon: const Icon(Icons.logout),
-                      label: const Text('Sair'),
                     ),
                   ],
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 24),
+              FilledButton.icon(
+                style: FilledButton.styleFrom(
+                  backgroundColor: colors.error,
+                  foregroundColor: colors.onError,
+                ),
+                onPressed: _loggingOut ? null : _logout,
+                icon: const Icon(Icons.logout),
+                label: Text(_loggingOut ? 'Saindo...' : 'Sair da conta'),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  static String _formatDateTime(DateTime dateTime) {
-    final local = dateTime.toLocal();
-    String twoDigits(int value) => value.toString().padLeft(2, '0');
-    return '${twoDigits(local.day)}/${twoDigits(local.month)}/${local.year} '
-        '${twoDigits(local.hour)}:${twoDigits(local.minute)}';
+  String _profile(String? code) => switch (code) {
+    'GESTOR' => 'Gestor',
+    'OPERADOR' => 'Operador',
+    _ => code ?? 'Não disponível',
+  };
+
+  String _permissionLabel(String code) {
+    const resources = {
+      'WAREHOUSE': 'estrutura do armazém',
+      'PRODUCT': 'produtos',
+      'ORDER': 'pedidos',
+      'PRE_RECEIPT': 'pré-recebimento',
+      'RECEIPT': 'recebimento',
+      'PUTAWAY': 'armazenagem',
+      'PICKING': 'separação',
+      'SHIPMENT': 'expedição',
+      'STOCK': 'estoque',
+      'WAVE': 'ondas',
+      'TRANSFER': 'transferências',
+      'TASK': 'tarefas',
+      'INVENTORY': 'inventário',
+      'AUDIT': 'auditoria',
+      'USER': 'usuários',
+      'PROFILE': 'perfis de acesso',
+    };
+    const actions = {
+      'VIEW': 'Consultar',
+      'CREATE': 'Criar',
+      'EDIT': 'Editar',
+      'EXECUTE': 'Executar',
+      'CANCEL': 'Cancelar',
+      'RELEASE': 'Liberar',
+      'APPROVE': 'Autorizar',
+      'PROFILE_ASSIGN': 'Atribuir perfil a',
+      'ASSIGN': 'Atribuir',
+    };
+    for (final resource
+        in resources.keys.toList()
+          ..sort((a, b) => b.length.compareTo(a.length))) {
+      if (code.startsWith('${resource}_')) {
+        final action = code.substring(resource.length + 1);
+        return '${actions[action] ?? action.toLowerCase().replaceAll('_', ' ')} ${resources[resource]}';
+      }
+    }
+    return code.toLowerCase().replaceAll('_', ' ');
   }
-}
 
-class _InfoRow extends StatelessWidget {
-  const _InfoRow({
-    required this.icon,
-    required this.label,
-    required this.value,
-  });
+  String _status(String? value) => switch (value) {
+    'ACTIVE' => 'Ativa',
+    'INVITED' => 'Aguardando verificação',
+    'DISABLED' => 'Desativada',
+    'LOCKED' => 'Bloqueada',
+    _ => value ?? 'Não disponível',
+  };
 
-  final IconData icon;
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(icon, size: 20, color: const Color(0xFF63706C)),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                label,
-                style: const TextStyle(
-                  color: Color(0xFF63706C),
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                value,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontWeight: FontWeight.w800),
-              ),
-            ],
+  Future<void> _reload() async {
+    setState(() {
+      _refreshing = true;
+    });
+    try {
+      await ref.read(authControllerProvider.notifier).reloadUser();
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              error is ApiException
+                  ? error.displayMessage
+                  : 'Não foi possível atualizar o perfil.',
+            ),
           ),
-        ),
-      ],
-    );
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _refreshing = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _logout() async {
+    setState(() {
+      _loggingOut = true;
+    });
+    try {
+      await ref.read(authControllerProvider.notifier).logout();
+    } catch (_) {
+      // Local credentials have already been removed, even without connectivity.
+    } finally {
+      if (mounted) {
+        setState(() {
+          _loggingOut = false;
+        });
+      }
+    }
   }
 }

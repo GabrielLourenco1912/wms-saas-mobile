@@ -16,33 +16,37 @@ class AuthErrorBanner extends StatelessWidget {
     final colorScheme = Theme.of(context).colorScheme;
     final message = switch (error) {
       ApiException exception => exception.displayMessage,
-      _ => 'Não foi possível concluir a autenticação.',
+      FormatException exception => exception.message,
+      _ => 'Não foi possível concluir a autenticação. Tente novamente.',
     };
 
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: colorScheme.error.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: colorScheme.error.withValues(alpha: 0.24)),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Icon(Icons.error_outline, color: colorScheme.error, size: 20),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              message,
-              style: TextStyle(
-                color: colorScheme.error,
-                fontWeight: FontWeight.w600,
-                height: 1.25,
+    return Semantics(
+      liveRegion: true,
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: colorScheme.error.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: colorScheme.error.withValues(alpha: 0.24)),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(Icons.error_outline, color: colorScheme.error, size: 20),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                message,
+                style: TextStyle(
+                  color: colorScheme.error,
+                  fontWeight: FontWeight.w600,
+                  height: 1.25,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

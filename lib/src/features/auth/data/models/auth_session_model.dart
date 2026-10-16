@@ -9,13 +9,23 @@ class AuthSessionModel {
       throw const ApiException(message: 'Payload de autenticação inválido.');
     }
 
+    final token = json['token']?.toString() ?? '';
+    final refreshToken = json['refreshToken']?.toString() ?? '';
+    if (token.isEmpty || refreshToken.isEmpty) {
+      throw const ApiException(
+        message: 'Resposta de sessão mobile sem tokens.',
+      );
+    }
     return AuthSession(
       issuer: json['issuer']?.toString() ?? '',
       issuedAt: _parseDate(json['issuedAt'], 'issuedAt'),
       expiresAt: _parseDate(json['expiresAt'], 'expiresAt'),
       subject: json['subject']?.toString() ?? '',
-      token: json['token']?.toString() ?? '',
-      refreshToken: json['refreshToken']?.toString() ?? '',
+      token: token,
+      refreshToken: refreshToken,
+      refreshTokenExpiresAt: json['refreshTokenExpiresAt'] == null
+          ? null
+          : _parseDate(json['refreshTokenExpiresAt'], 'refreshTokenExpiresAt'),
     );
   }
 

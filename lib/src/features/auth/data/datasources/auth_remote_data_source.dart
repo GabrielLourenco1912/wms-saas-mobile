@@ -12,85 +12,112 @@ final authRemoteDataSourceProvider = Provider<AuthRemoteDataSource>((ref) {
 });
 
 abstract class AuthRemoteDataSource {
-  Future<AuthSession> login({required String email, required String password});
-
-  Future<AuthSession> register({
-    required String name,
+  Future<AuthChallenge> login({
     required String email,
     required String password,
   });
-
-  Future<AuthSession> refresh({
-    required String accessToken,
-    required String refreshToken,
+  Future<AuthSession> verifyChallenge({
+    required String challengeId,
+    required String code,
   });
+  Future<AuthChallenge> forgotPassword(String email);
+  Future<void> resetPassword({
+    required String challengeId,
+    required String code,
+    required String newPassword,
+  });
+  Future<AuthSession> refresh({required String refreshToken});
+  Future<AppUser> currentUser(String token);
+  Future<void> logout(String refreshToken);
 }
 
 class DioAuthRemoteDataSource implements AuthRemoteDataSource {
   const DioAuthRemoteDataSource(this._dio);
-
   final Dio _dio;
 
   @override
-  Future<AuthSession> login({required String email, required String password}) {
-    return _postAuth(
-      '/api/auth/login',
-      data: {'email': email, 'password': password},
-    );
-  }
-
-  @override
-  Future<AuthSession> register({
-    required String name,
+  Future<AuthChallenge> login({
     required String email,
     required String password,
-  }) {
-    return _postAuth(
-      '/api/auth/register',
-      data: {'name': name, 'email': email, 'password': password},
-    );
+  }) async => AuthChallenge.fromJson(
+    await _post('/api/auth/login', {
+      'email': email.trim(),
+      'password': password,
+    }),
+  );
+
+  @override
+  Future<AuthSession> verifyChallenge({
+    required String challengeId,
+    required String code,
+  }) async => AuthSessionModel.fromJson(
+    await _post('/api/auth/challenge/verify', {
+      'challengeId': challengeId,
+      'code': code,
+    }),
+  );
+
+  @override
+  Future<AuthChallenge> forgotPassword(String email) async =>
+      AuthChallenge.fromJson(
+        await _post('/api/auth/forgot-password', {'email': email.trim()}),
+      );
+
+  @override
+  Future<void> resetPassword({
+    required String challengeId,
+    required String code,
+    required String newPassword,
+  }) async {
+    await _post('/api/auth/reset-password', {
+      'challengeId': challengeId,
+      'code': code,
+      'newPassword': newPassword,
+    });
   }
 
   @override
-  Future<AuthSession> refresh({
-    required String accessToken,
-    required String refreshToken,
-  }) {
-    return _postAuth(
-      '/api/auth/refresh',
-      data: {'refreshToken': refreshToken},
-      options: Options(headers: {'Authorization': 'Bearer $accessToken'}),
-    );
+  Future<AuthSession> refresh({required String refreshToken}) async =>
+      AuthSessionModel.fromJson(
+        await _post('/api/auth/refresh', {'refreshToken': refreshToken}),
+      );
+
+  @override
+  Future<void> logout(String refreshToken) async {
+    await _post('/api/auth/logout', {'refreshToken': refreshToken});
   }
 
-  Future<AuthSession> _postAuth(
-    String path, {
-    required Map<String, Object?> data,
-    Options? options,
-  }) async {
+  @override
+  Future<AppUser> currentUser(String token) async {
+    try {
+      final response = await _dio.get<Object?>(
+        '/api/users/me',
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      final envelope = ApiEnvelope<AppUser>.fromJson(
+        response.data,
+        AppUser.fromJson,
+      );
+      return envelope.data ??
+          (throw const ApiException(
+            message: 'Não foi possível carregar seu perfil.',
+          ));
+    } on DioException catch (error) {
+      throw ApiException.fromDio(error);
+    }
+  }
+
+  Future<Object?> _post(String path, Map<String, Object?> data) async {
     try {
       final response = await _dio.post<Object?>(
         path,
         data: data,
-        options: options,
+        options: Options(headers: {'X-Client-Type': 'MOBILE'}),
       );
-      final envelope = ApiEnvelope<AuthSession>.fromJson(
+      return ApiEnvelope<Object?>.fromJson(
         response.data,
-        AuthSessionModel.fromJson,
-      );
-      final session = envelope.data;
-
-      if (session == null) {
-        throw ApiException(
-          message: envelope.message.isEmpty
-              ? 'Resposta de autenticação sem sessão.'
-              : envelope.message,
-          status: envelope.status,
-          statusCode: response.statusCode,
-        );
-      }
-
-      return session;
+        (value) => value,
+      ).data;
     } on DioException catch (error) {
       throw ApiException.fromDio(error);
     }
