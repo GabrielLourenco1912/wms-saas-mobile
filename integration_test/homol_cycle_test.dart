@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -321,7 +322,7 @@ Future<void> select(WidgetTester tester, String label, String query) async {
   await until(tester, option);
   // Long document labels can wrap underneath the keyboard on a 320 px device.
   FocusManager.instance.primaryFocus?.unfocus();
-  tester.testTextInput.hide();
+  await SystemChannels.textInput.invokeMethod<void>('TextInput.hide');
   await tester.pumpAndSettle(const Duration(milliseconds: 100));
   await Scrollable.ensureVisible(tester.element(option.first), alignment: 0.3);
   await tester.pumpAndSettle(const Duration(milliseconds: 100));
