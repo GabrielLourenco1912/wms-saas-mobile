@@ -23,7 +23,7 @@ Os manifests Android de debug/profile permitem HTTP para desenvolvimento. Use HT
 - Não existe cadastro público no aplicativo. A criação de contas é administrativa; a recuperação de senha está disponível na tela de entrada.
 - Access token e refresh token ficam no armazenamento seguro. As renovações simultâneas compartilham uma única chamada; um 401 protegido permite uma repetição, enquanto um 403 informa falta de permissão.
 - Listas usam páginas de 20 registros, pesquisa e filtros por situação. Seletores pesquisam opções em páginas de cinco.
-- As leituras físicas aceitam digitação e scanners que funcionem como teclado (HID). Não há leitura pela câmera ou execução de operações sem conexão.
+- As leituras físicas aceitam digitação, scanners que funcionem como teclado (HID) e captura por câmera nos campos de SKU, LPN e posição. A câmera preenche o campo; a API valida a confirmação. Não há execução de operações sem conexão.
 - Após uma resposta incerta, repita somente a mesma operação e os mesmos dados. A chave de idempotência fica em memória enquanto a sessão permanece ativa. Após reiniciar o aplicativo, consulte o estado no servidor antes de repetir uma operação pendente.
 
 ## Organização

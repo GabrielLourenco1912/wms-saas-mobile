@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../app/branding/brand_tokens.dart';
+import '../../widgets/code_scan_field.dart';
 
 import 'inbound_contracts.dart';
 
@@ -103,25 +103,13 @@ class InboundScannerField extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.only(bottom: 16),
-    child: TextFormField(
+    child: CodeScanField(
       controller: controller,
+      label: label,
       enabled: enabled,
       maxLength: maxLength,
-      textInputAction: TextInputAction.next,
-      autocorrect: false,
-      enableSuggestions: false,
-      style: const TextStyle(fontFamily: AppBrand.monoFont, fontSize: 16),
-      decoration: InputDecoration(
-        labelText: label,
-        prefixIcon: const Icon(Icons.barcode_reader),
-        helperText:
-            helperText ?? 'Digite ou utilize um leitor externo conectado.',
-        helperMaxLines: 3,
-        counterText: '',
-      ),
-      validator:
-          validator ??
-          (value) => (value ?? '').trim().isEmpty ? 'Informe o código.' : null,
+      helperText: helperText,
+      validator: validator,
     ),
   );
 }

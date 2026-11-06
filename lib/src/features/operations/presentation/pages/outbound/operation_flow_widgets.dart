@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../../app/branding/brand_tokens.dart';
 import '../../../data/warehouse_repository.dart';
+import '../../widgets/code_scan_field.dart';
 
 typedef OperationDetailBuilder =
     Widget Function(
@@ -231,6 +232,7 @@ Widget operationField({
   bool enabled = true,
   bool isRequired = true,
   bool technical = false,
+  bool scan = false,
   int maxLength = 100,
   String? helper,
   String? Function(String?)? validator,
@@ -238,30 +240,40 @@ Widget operationField({
   ValueChanged<String>? onChanged,
 }) => Padding(
   padding: const EdgeInsets.only(bottom: 14),
-  child: TextFormField(
-    controller: controller,
-    enabled: enabled,
-    maxLength: maxLength,
-    keyboardType: keyboardType,
-    style: technical || keyboardType?.index == TextInputType.number.index
-        ? const TextStyle(fontFamily: AppBrand.monoFont, fontSize: 16)
-        : null,
-    autocorrect: false,
-    enableSuggestions: false,
-    textInputAction: TextInputAction.next,
-    decoration: InputDecoration(
-      labelText: label,
-      helperText: helper,
-      helperMaxLines: 3,
-      counterText: '',
-    ),
-    validator:
-        validator ??
-        (value) => isRequired && (value == null || value.trim().isEmpty)
-            ? 'Informe $label.'
-            : null,
-    onChanged: onChanged,
-  ),
+  child: scan
+      ? CodeScanField(
+          controller: controller,
+          label: label,
+          enabled: enabled,
+          maxLength: maxLength,
+          helperText: helper,
+          validator: validator,
+          onChanged: onChanged,
+        )
+      : TextFormField(
+          controller: controller,
+          enabled: enabled,
+          maxLength: maxLength,
+          keyboardType: keyboardType,
+          style: technical || keyboardType?.index == TextInputType.number.index
+              ? const TextStyle(fontFamily: AppBrand.monoFont, fontSize: 16)
+              : null,
+          autocorrect: false,
+          enableSuggestions: false,
+          textInputAction: TextInputAction.next,
+          decoration: InputDecoration(
+            labelText: label,
+            helperText: helper,
+            helperMaxLines: 3,
+            counterText: '',
+          ),
+          validator:
+              validator ??
+              (value) => isRequired && (value == null || value.trim().isEmpty)
+                  ? 'Informe $label.'
+                  : null,
+          onChanged: onChanged,
+        ),
 );
 
 String? validateOperationQuantity(String? value, {bool allowZero = false}) {

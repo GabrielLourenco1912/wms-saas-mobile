@@ -148,12 +148,14 @@ class _ShipmentScanPageState extends ConsumerState<ShipmentScanPage> {
       if (!widget.dispatch)
         operationField(
           label: 'LPN lido',
+          scan: true,
           technical: true,
           controller: _lpn,
           enabled: !busy,
         ),
       operationField(
         label: 'Código da doca lido',
+        scan: true,
         technical: true,
         controller: _dock,
         enabled: !busy,

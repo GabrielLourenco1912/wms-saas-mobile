@@ -70,7 +70,7 @@ O aplicativo não cria os cadastros administrativos, os pré-recebimentos, os pe
 ## Segurança da operação e experiência de uso
 
 - Botões e módulos dependem das permissões atuais. A validação definitiva permanece no servidor, incluindo estado, responsabilidade, saldo e vínculos.
-- Formulários indicam os dados físicos a conferir, unidades e justificativas. Campos de leitura aceitam teclado e scanner HID; não há integração com câmera ou SDK específico de coletor.
+- Formulários indicam os dados físicos a conferir, unidades e justificativas. Campos de leitura aceitam teclado, scanner HID e câmera, por um componente compartilhado com cancelamento, controle de repetição e ciclo de vida. A captura não confirma uma operação automaticamente. Não há SDK específico de coletor.
 - Consultas exibem carregamento, estado vazio, erro e nova tentativa. A atualização manual consulta novamente o servidor; o aplicativo não baixa estoque localmente por antecipação.
 - Ações em andamento bloqueiam envios duplicados. A confirmação recebida atualiza o detalhe; falha ao atualizar uma consulta após sucesso deve ser tratada como falha da consulta, sem presumir nova execução do comando.
 - Quantidades aceitam vírgula decimal na entrada e são normalizadas para o JSON. Os validadores limitam inteiros/casas decimais conforme o contrato e recusam valores que perderiam precisão no transporte numérico do dispositivo; não arredondam silenciosamente a quantidade do operador.
@@ -107,3 +107,9 @@ Validação atualizada em 16/10/2026, com Flutter 3.41.9 e Dart 3.11.5:
  A existência dos testes não representa homologação com um armazém, backend real, servidor SMTP ou scanner físico. A conferência em dispositivo e a homologação integrada permanecem necessárias, assim como validar conectividade/permissões de rede nas plataformas de distribuição.
 
 O arquivo legado `frontend-authentication-contract.txt` foi preservado, mas está obsoleto: descreve login com token imediato, cadastro público e transporte antigo do refresh. Para desenvolvimento e novas telas, use esta documentação e o guia atual do backend.
+
+## Captura por câmera — 06/11/2026
+
+A branch `develop` acrescenta `mobile_scanner` 7.5.0 e `CodeScanField`, compartilhado por recebimento, putaway, transferências, picking, expedição e inventário. O código é preservado como texto, incluindo zeros iniciais. Cancelar mantém a entrada anterior; somente uma captura é aceita por abertura. O plugin gerencia pausa/retomada e descarte do controlador quando a tela é fechada. Android declara câmera como recurso opcional; a digitação continua disponível.
+
+Verificação desta entrega: 73 testes Flutter aprovados (sete novos casos do campo), análise estática sem ocorrências e APK Android debug compilado. Os testes do campo substituem apenas o lançador de captura, sem demonstrar leitura óptica ou periférico físico. A validação com etiquetas, permissão e condições do aparelho permanece uma verificação manual identificada na documentação de homologação.

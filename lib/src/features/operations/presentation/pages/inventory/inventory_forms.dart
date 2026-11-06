@@ -48,6 +48,7 @@ class _CreateInventoryPageState extends ConsumerState<CreateInventoryPage> {
         const SizedBox(height: 14),
         operationField(
           label: 'Código físico da posição lido',
+          scan: true,
           technical: true,
           controller: _positionCode,
           enabled: !busy,
@@ -195,6 +196,7 @@ class _InventoryCountPageState extends ConsumerState<InventoryCountPage> {
         ],
         operationField(
           label: 'Código físico da posição lido',
+          scan: true,
           technical: true,
           controller: _positionCode,
           enabled: !busy,
@@ -202,12 +204,14 @@ class _InventoryCountPageState extends ConsumerState<InventoryCountPage> {
         ),
         operationField(
           label: 'LPN lido',
+          scan: true,
           technical: true,
           controller: _lpn,
           enabled: !busy,
         ),
         operationField(
           label: 'SKU do produto lido',
+          scan: true,
           technical: true,
           controller: _productCode,
           enabled: !busy,
@@ -329,6 +333,7 @@ class _InventoryClosePageState extends ConsumerState<InventoryClosePage> {
     fields: (busy) => [
       operationField(
         label: 'Código físico da posição lido',
+        scan: true,
         technical: true,
         controller: _positionCode,
         enabled: !busy,

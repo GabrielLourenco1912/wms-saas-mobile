@@ -547,7 +547,7 @@ class _ReceiptConfirmationPageState
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      'A leitura aceita digitação e leitor externo (HID). Não há leitura por câmera nesta tela.',
+                      'Digite, utilize um leitor externo (HID) ou toque na câmera ao lado do campo.',
                     ),
                   ],
                 ),
