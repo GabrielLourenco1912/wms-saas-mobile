@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/branding/brand_about_card.dart';
 import '../../../../core/errors/api_exception.dart';
+import '../../../../core/diagnostics/feedback_probe.dart';
 import '../../../auth/application/auth_controller.dart';
 
 class ProfilePage extends ConsumerStatefulWidget {
@@ -128,6 +130,18 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
               ),
               const SizedBox(height: 12),
               const BrandAboutCard(),
+              if (FeedbackProbe.enabled) ...[
+                const SizedBox(height: 12),
+                OutlinedButton.icon(
+                  icon: const Icon(Icons.timer_outlined),
+                  label: const Text('Medições de homologação'),
+                  onPressed: () => Navigator.of(context).push<void>(
+                    MaterialPageRoute(
+                      builder: (_) => const _FeedbackMeasurementsPage(),
+                    ),
+                  ),
+                ),
+              ],
               const SizedBox(height: 24),
               FilledButton.icon(
                 style: FilledButton.styleFrom(
@@ -243,4 +257,65 @@ class _ProfilePageState extends ConsumerState<ProfilePage> {
       }
     }
   }
+}
+
+/// Compiled into the UI only for acceptance builds with capture enabled.
+class _FeedbackMeasurementsPage extends StatefulWidget {
+  const _FeedbackMeasurementsPage();
+  @override
+  State<_FeedbackMeasurementsPage> createState() =>
+      _FeedbackMeasurementsPageState();
+}
+
+class _FeedbackMeasurementsPageState extends State<_FeedbackMeasurementsPage> {
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(title: const Text('Medições de homologação')),
+    body: ListView(
+      padding: const EdgeInsets.all(16),
+      children: [
+        const Text(
+          'Intervalo entre código completo (câmera ou término no teclado) e primeiro quadro de feedback confirmado. Inclui a espera até confirmar o formulário. Registre aparelho, modo de build e rede ao exportar.',
+        ),
+        const SizedBox(height: 16),
+        for (final sample in FeedbackProbe.samples)
+          ListTile(
+            title: Text(
+              '${(sample['durationMs'] as num).toStringAsFixed(1)} ms',
+            ),
+            subtitle: Text('${sample['input']} · ${sample['outcome']}'),
+            trailing: Icon(
+              (sample['durationMs'] as num) < 2000
+                  ? Icons.check_circle_outline
+                  : Icons.timer_off_outlined,
+            ),
+          ),
+        if (FeedbackProbe.samples.isEmpty)
+          const Text(
+            'Nenhuma medição. Complete uma leitura e confirme uma operação.',
+          ),
+        FilledButton.icon(
+          onPressed: () async {
+            final rows = FeedbackProbe.samples
+                .map((s) => '${s['input']},${s['outcome']},${s['durationMs']}')
+                .join('\n');
+            await Clipboard.setData(
+              ClipboardData(text: 'input,outcome,duration_ms\n$rows'),
+            );
+            if (context.mounted) {
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('CSV copiado.')));
+            }
+          },
+          icon: const Icon(Icons.copy),
+          label: const Text('Copiar medições em CSV'),
+        ),
+        TextButton(
+          onPressed: () => setState(FeedbackProbe.reset),
+          child: const Text('Iniciar novo ensaio'),
+        ),
+      ],
+    ),
+  );
 }

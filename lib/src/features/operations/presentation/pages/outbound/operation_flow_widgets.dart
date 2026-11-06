@@ -1,3 +1,4 @@
+import '../../../../../core/diagnostics/feedback_probe.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -165,11 +166,13 @@ class _OperationCommandPageState extends State<OperationCommandPage> {
         context,
       ).showSnackBar(SnackBar(content: Text(message)));
       Navigator.of(context).pop(true);
+      FeedbackProbe.rendered('confirmed');
     } catch (error) {
       if (mounted) {
         setState(() {
           _error = '$error';
         });
+        FeedbackProbe.rendered('rejected');
       }
     } finally {
       if (mounted) {

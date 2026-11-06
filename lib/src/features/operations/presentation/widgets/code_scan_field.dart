@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../../../../app/branding/brand_tokens.dart';
+import '../../../../core/diagnostics/feedback_probe.dart';
 
 typedef CodeScanLauncher = Future<String?> Function(BuildContext context);
 
@@ -63,6 +64,7 @@ class _CodeScanFieldState extends State<CodeScanField> {
         text: code,
         selection: TextSelection.collapsed(offset: code.length),
       );
+      FeedbackProbe.begin('camera_decoded');
       widget.onChanged?.call(code);
     } catch (_) {
       if (mounted) {
@@ -106,6 +108,7 @@ class _CodeScanFieldState extends State<CodeScanField> {
         widget.validator ??
         (value) => (value ?? '').trim().isEmpty ? 'Informe o código.' : null,
     onChanged: widget.onChanged,
+    onFieldSubmitted: (_) => FeedbackProbe.begin('keyboard_code_complete'),
   );
 }
 

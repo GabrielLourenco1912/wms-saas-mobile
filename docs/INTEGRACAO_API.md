@@ -104,7 +104,7 @@ Validação atualizada em 16/10/2026, com Flutter 3.41.9 e Dart 3.11.5:
 - Layout verificado em teste com largura de 320 pixels e escala de texto de 1,6 no painel/listas e 2 no acesso e na seção Sobre; capturas de 390 × 844 também inspecionadas com dados de teste.
 - Tema Manrope/DM Mono, marca, autoria e recursos nativos aplicados conforme [guia de identidade visual](IDENTIDADE_VISUAL.md), preservando os contratos acima.
 
- A existência dos testes não representa homologação com um armazém, backend real, servidor SMTP ou scanner físico. A conferência em dispositivo e a homologação integrada permanecem necessárias, assim como validar conectividade/permissões de rede nas plataformas de distribuição.
+Esses testes de camada não comprovam captura física. A aceitação adicional com serviços reais da branch homol está descrita abaixo; a conferência em dispositivo e a conectividade/permissões das plataformas de distribuição continuam necessárias.
 
 O arquivo legado `frontend-authentication-contract.txt` foi preservado, mas está obsoleto: descreve login com token imediato, cadastro público e transporte antigo do refresh. Para desenvolvimento e novas telas, use esta documentação e o guia atual do backend.
 
@@ -113,3 +113,34 @@ O arquivo legado `frontend-authentication-contract.txt` foi preservado, mas est�
 A branch `develop` acrescenta `mobile_scanner` 7.5.0 e `CodeScanField`, compartilhado por recebimento, putaway, transferências, picking, expedição e inventário. O código é preservado como texto, incluindo zeros iniciais. Cancelar mantém a entrada anterior; somente uma captura é aceita por abertura. O plugin gerencia pausa/retomada e descarte do controlador quando a tela é fechada. Android declara câmera como recurso opcional; a digitação continua disponível.
 
 Verificação desta entrega: 73 testes Flutter aprovados (sete novos casos do campo), análise estática sem ocorrências e APK Android debug compilado. Os testes do campo substituem apenas o lançador de captura, sem demonstrar leitura óptica ou periférico físico. A validação com etiquetas, permissão e condições do aparelho permanece uma verificação manual identificada na documentação de homologação.
+
+## Aceitação integrada e medições — branch homol
+
+`integration_test/homol_cycle_test.dart` usa o aplicativo, router, armazenamento e
+HTTP reais em um Android emulado. O driver externo prepara documentos no painel
+web com Playwright e acompanha saldo/livro razão no Spring/MySQL. O ciclo cobre
+recebimento de 20 unidades, putaway, pedido/onda de 8, picking, preparação,
+conferência e despacho; o saldo final esperado é 12. Os cenários adicionais de
+transferência, inventário, falta, bloqueio, cancelamento e idempotência são
+executados pela API, e não são apresentados como ações da interface móvel.
+
+O driver usa autenticação com desafio SMTP, dados sintéticos e token privado de
+coordenação. Não substitui os providers da aplicação nem introduz endpoints de
+autenticação alternativos. Consulte o guia `docker/HOMOLOGACAO.md` da raiz para
+reproduzir e localizar capturas, respostas sanitizadas e tempos individuais.
+
+O build com `--dart-define=CAPTURE_FEEDBACK_METRICS=true` habilita no perfil as
+**Medições de homologação**. O tempo começa no código decodificado pela câmera
+ou no envio do código pelo teclado e termina no primeiro quadro do resultado
+confirmado/rejeitado pela API. Inclui o tempo até confirmar o formulário; não
+mede o tempo de enquadrar a etiqueta antes da decodificação. Somente a última
+leitura completa inicia cada amostra. A tela permite limpar e copiar CSV, sem
+armazenar códigos, credenciais ou tokens. O coletor fica desativado no build
+padrão de produção.
+
+Os testes do emulador utilizam digitação e build debug. A medição final da câmera
+e do feedback em aparelho físico deve usar o APK profile da branch homol,
+registrando modelo/Android/rede, sucessos e rejeições em grupos separados. Os
+resultados sintéticos não comprovam ergonomia com luvas, periféricos nem operação
+empresarial. A validação original de 16/10 acima é histórica; nesta entrega foram
+reexecutados análise sem ocorrências e os **73 testes Flutter**.

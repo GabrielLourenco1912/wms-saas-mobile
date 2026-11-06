@@ -1,3 +1,4 @@
+import '../../../../core/diagnostics/feedback_probe.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -332,12 +333,16 @@ class _ReceiptConfirmationPageState
               'scannedPositionCode': _scannedPosition.text.trim(),
             },
           );
-      if (mounted) Navigator.of(context).pop(result);
+      if (mounted) {
+        Navigator.of(context).pop(result);
+        FeedbackProbe.rendered('confirmed');
+      }
     } catch (error) {
       if (mounted) {
         setState(() {
           _error = error;
         });
+        FeedbackProbe.rendered('rejected');
       }
     } finally {
       if (mounted) {
