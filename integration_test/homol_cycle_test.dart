@@ -319,6 +319,14 @@ Future<void> select(WidgetTester tester, String label, String query) async {
     matching: find.textContaining(query),
   );
   await until(tester, option);
+  // Long document labels can wrap underneath the keyboard on a 320 px device.
+  FocusManager.instance.primaryFocus?.unfocus();
+  tester.testTextInput.hide();
+  await tester.pumpAndSettle(const Duration(milliseconds: 100));
+  await Scrollable.ensureVisible(tester.element(option.first), alignment: 0.3);
+  await tester.pumpAndSettle(const Duration(milliseconds: 100));
+  expect(option.first.hitTestable(), findsOneWidget);
   await tester.tap(option.first);
   await tester.pumpAndSettle(const Duration(milliseconds: 100));
+  expect(find.byTooltip('Fechar seleção'), findsNothing);
 }
