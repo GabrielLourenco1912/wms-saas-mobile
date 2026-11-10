@@ -1,4 +1,4 @@
-package com.example.wms_saas_mobile
+package dev.lourencogabriel.wms_saas_mobile
 
 import io.flutter.embedding.android.FlutterActivity
 
